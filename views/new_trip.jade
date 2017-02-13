@@ -1,0 +1,22 @@
+extends layout
+
+block content
+	h3= title
+	form#form_add_trip(name="addTrip", method="post", action="/addtrip")
+		span Title
+		span &nbsp;
+		input#input_name(type="text", placeholder="title", name="title")
+		br
+		br 
+		span Start date
+		span &nbsp;
+		input#input_name(type="text", placeholder="initDate", name="initDate")
+		br
+		br 
+		span End date
+		span &nbsp;
+		input#input_name(type="text", placeholder="endDate", name="endDate")
+		br
+		br
+
+		button#submit_trip(type="submit") submit 

@@ -1,0 +1,9 @@
+extends layout
+
+block content
+	h3.
+		Trips
+	ul
+		each trip, i in tripList
+			li#trip_list_item
+				a(href="#") #{trip.title} will be from #{trip.initDate} to #{trip.endDate}
