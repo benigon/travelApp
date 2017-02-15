@@ -1,12 +1,23 @@
 var express = require('express');
 var router = express.Router();
 var mongodb = require('mongodb');
+var jwt = require('express-jwt');
+
+var auth = jwt({
+	secret: 'MY_SECRET',
+	userProperty: 'payload'
+});
+
+var ctrlProfile = require('../app_api/controllers/profile');
+var ctrlAuth = require('../app_api/controllers/authentication');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
 	res.render('index', { title: 'Express' });
 });
 
+// Get User Profile
+router.get('/profile', auth, ctrlProfile.profileRead);
 
 router.get('/trips', function(req, res) {
 	var MongoClient = mongodb.MongoClient;
@@ -70,8 +81,16 @@ router.get('/headers', function(req, res) {
 })
 
 router.use(function(req, res, next){
+	var err = new Error('Not found');
 	res.status(404).render('error', {"message": "Page not found", "error": {"status": 404}});
+	next(err)
 });
 
+router.use(function(err, req, res, next) {
+	if (err.name === 'UnauthorizatedError') {
+		res.status(401);
+		res.json({"message": err.name + ": " + err.message});
+	}
+});
 
 module.exports = router;

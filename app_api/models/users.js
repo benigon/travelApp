@@ -1,3 +1,4 @@
+var mongoose = require( 'mongoose' );
 var crypto = require('crypto');
 var jwt = require('jsonwebtoken');
 
@@ -36,3 +37,5 @@ userSchema.methods.generateJwt = function() {
 		exp: parseInt(expiry.getTime() / 1000),
 	}, "MY_SECRET");
 };
+
+mongoose.model('User', userSchema);

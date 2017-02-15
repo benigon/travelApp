@@ -1,7 +1,14 @@
-module exports register = function(req, res) {
-	console.log("Registering user: " + req.body.email);
-	res.status(200);
-	res.json({
-		"message": "User registered: " + req.body.email
-	});
+var mongoose = require('mongoose');
+require('../models/users');
+var User = mongoose.model('User');
+
+module.exports.profileRead = function(req, res) {
+	// If there is not user ID in JET, return 401
+	if (!req.payload._id) {
+		res.status(401).json({"message": "UnauthorizedError: private profile"});
+	} else {
+		User.findById(req.payload._id).exec(function(err, user) {
+			res.status(200).json(user);
+		});
+	}
 };
